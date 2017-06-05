@@ -1,6 +1,6 @@
 #include "paddle.hpp"
 
-Paddle::Paddle(float startX, float startY)
+Paddle::Paddle(float x, float y)
 {
 	position.x = 0;
 	position.y = 2000;
