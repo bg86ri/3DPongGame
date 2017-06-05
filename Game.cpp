@@ -5,6 +5,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 using namespace sf;
 
@@ -23,12 +24,13 @@ void gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFa
 
 void drawCube(float x, float y, float z)
 {
+	glPushMatrix();
+	glMatrixMode(GL_MODELVIEW);
 	glMatrixMode(GL_PROJECTION);
 	
 	glTranslatef(x, y, z);
 	glRotatef(0, 0, 0, 0);
 	
-	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
 	glBegin(GL_QUADS);
@@ -83,6 +85,33 @@ int main()
 	//RenderWindow window(VideoMode(windowWidth, windowHeight), "Pong");
 	sf::Window window(sf::VideoMode(windowWidth, windowWidth), "Pong!", sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(24));
 	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60);
+
+	sf::SoundBuffer buffer;
+	if (!buffer.loadFromFile("Sounds/PaddleWoosh.wav"))
+	{
+		return -1;
+	}
+
+	sf::SoundBuffer buffer2;
+	if (!buffer2.loadFromFile("Sounds/Goodbye.wav"))
+	{
+		return -1;
+	}
+
+	sf::Font font;
+	if (!font.loadFromFile("Fonts/coolvetica rg.ttf"))
+	{
+		return -1;
+	}
+
+	sf::Sound sound;
+
+	sf::Sound sound2;
+
+	sound.setBuffer(buffer);
+
+	sound2.setBuffer(buffer2);
 
 	// activate the window
 	window.setActive(true);
@@ -96,8 +125,7 @@ int main()
 
 	Text hud;
 	
-	Font font;
-	font.loadFromFile("coolvetica rg.ttf");
+	//Font font;
 
 	hud.setFont(font);
 
@@ -125,15 +153,18 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::A))
 		{
 			paddle.moveLeft();
+			sound.play();
 		}
 
 		else if (Keyboard::isKeyPressed(Keyboard::D))
 		{
 			paddle.moveRight();
+			sound.play();
 		}
 
 		else if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
+			sound2.play();
 			window.close();
 		}
 
@@ -167,9 +198,9 @@ int main()
 		ball.update();
 		paddle.update();
 
-		std::stringstream ss;
+		/*std::stringstream ss;
 		ss << "Score:" << score << "      Lives:" << lives;
-		hud.setString(ss.str());
+		hud.setString(ss.str());*/
 
 		//window.clear(Color(26, 128, 182, 255));
 		//window.draw(ball.getShape());
@@ -185,9 +216,7 @@ int main()
 		gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 200.0f);
 		
 		drawCube(paddle.getPosition().left, -3, -10);
-		drawCube(0, 5, -10);
-		//drawCube(0, 5, -10);
-		drawCube(0, 5, -10);
+		drawCube(0, 1, -15);
 
 		// end the current frame (internally swaps the front and back buffers)
 		window.display();

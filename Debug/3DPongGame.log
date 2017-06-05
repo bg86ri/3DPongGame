@@ -1,5 +1,5 @@
 ﻿  Game.cpp
-d:\year 2 - uni\cet219\3dponggame\game.cpp(93): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\year 2 - uni\cet219\3dponggame\game.cpp(95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\year 2 - uni\cet219\3dponggame\game.cpp(122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\year 2 - uni\cet219\3dponggame\game.cpp(124): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   3DPongGame.vcxproj -> D:\Year 2 - Uni\CET219\3DPongGame\Debug\3DPongGame.exe
   3DPongGame.vcxproj -> D:\Year 2 - Uni\CET219\3DPongGame\Debug\3DPongGame.pdb (Partial PDB)
