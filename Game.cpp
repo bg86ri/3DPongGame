@@ -31,7 +31,6 @@ void drawBackground(float x, float y, float z)
 
 	glTranslatef(x, y, z);
 	glRotatef(0, 0, 0, 0);
-	glPushMatrix();
 
 	glBegin(GL_QUADS);
 
@@ -131,6 +130,7 @@ void drawCube(float x, float y, float z)
 
 int main()
 {
+	
 	// create the window
 	int windowWidth = 900;
 	int windowHeight = 900;
@@ -139,18 +139,15 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowWidth), "Pong!", sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings(24));
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-
-	/*sf::Texture texLid;
-	std::string background = "Textures/Grass.jpg";
-	if (!texLid.loadFromFile(background))
-	{
-		std::cout << "Couldn't load texture" << std::endl;
-		return false;
-	}
 	
-	glEnable(GL_TEXTURE_2D);
+	sf::ContextSettings settings = window.getSettings();
+	
+	std::cout << "Depth Bits:" << settings.depthBits << std::endl;
+	std::cout << "Stencil Bits:" << settings.stencilBits << std::endl;
+	std::cout << "Antialiasing Level:" << settings.antialiasingLevel << std::endl;
+	std::cout << "Version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
-	sf::Texture::bind(&texLid);*/
+	bool exitMode = false;
 
 	sf::SoundBuffer buffer;
 	if (!buffer.loadFromFile("Sounds/PaddleWoosh.wav"))
@@ -192,6 +189,9 @@ int main()
 
 	// run the main loop
 	bool running = true;
+
+	float counter = 0.0f;
+
 	while (running)
 	{
 		// handle events
@@ -207,29 +207,44 @@ int main()
 
 		if (Keyboard::isKeyPressed(Keyboard::A))
 		{
-			std::cout << "Move Left" << std::endl;
-			paddle.moveLeft();
-			sound.play();
+			if (paddle.getPosition().left > -4.6)
+			{
+				std::cout << "Move Left" << std::endl;
+				std::cout << "Paddle Position - Left: " << paddle.getPosition().left << std::endl;
+				paddle.moveLeft();
+				sound.play();
+			}
 		}
 
 		else if (Keyboard::isKeyPressed(Keyboard::D))
 		{
-			std::cout << "Move Right" << std::endl;
-			paddle.moveRight();
-			sound.play();
+			if (paddle.getPosition().left < 4.6)
+			{
+				std::cout << "Move Right" << std::endl;
+				std::cout << "Paddle Position - Right: " << paddle.getPosition().left << std::endl;
+				paddle.moveRight();
+				sound.play();
+			}
 		}
 		
 		else if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			std::cout << "Quit Game? Press Enter to leave" << std::endl;
-			sound2.play();
+			if (!exitMode)
+			{
+				sound2.play();
+				exitMode = true;
+			}
 		}
 
 		else if (Keyboard::isKeyPressed(Keyboard::Return))
 		{
-			std::cout << "Exit" << std::endl;
-			window.close();
-			running = false;
+			if (exitMode)
+			{
+				std::cout << "Exit" << std::endl;
+				window.close();
+				running = false;
+			}
 		}
 
 		if (ball.getPosition().top > windowHeight)
@@ -243,24 +258,9 @@ int main()
 			}
 		}
 
-		if (ball.getPosition().top < 0)
-		{
-			ball.reboundPaddleOrTop();
-			score++;
-		}
-
-		if (ball.getPosition().left < 0 || ball.getPosition().left + 10 > windowWidth)
-		{
-			ball.reboundSides();
-		}
-
-		if (ball.getPosition().intersects(paddle.getPosition()))
-		{
-			ball.reboundPaddleOrTop();
-		}
-
 		ball.update();
-		paddle.update();
+		paddle.update(); 
+		
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
@@ -272,9 +272,25 @@ int main()
 		gluPerspective(45.0f, 800.0f / 600.0f, 1.0f, 200.0f);
 		
 		drawCube(paddle.getPosition().left, -3, -9);
-		drawCube(0, 1, -13);
+		drawCube(ball.getPosition().left, ball.getPosition().top, -13);
+		if (ball.getPosition().left > 6.3 || ball.getPosition().left < -6.3)
+		{
+			float random = rand() % 201 + (-100);
+			ball.flipXVelocity();
+			ball.setYVelocity((float)(random / 1000));
+		}
+		if (ball.getPosition().top > 4.5)
+		{
+			ball.flipYVelocity();
+		}
+		if (ball.getPosition().top < -5)
+		{
+			ball.reset();
+			ball.flipYVelocity();
+		}
 		drawBackground(0, 0, -20);
 
+		counter += 0.1f;
 		// end the current frame (internally swaps the front and back buffers)
 		window.display();
 	}

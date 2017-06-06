@@ -2,8 +2,8 @@
 
 Ball::Ball(float startX, float startY)
 {
-	position.x = startX;
-	position.y = startY;
+	position.x = 0;
+	position.y = 0;
 
 	ballShape.setSize(sf::Vector2f(10, 10));
 	ballShape.setPosition(position);
@@ -24,15 +24,14 @@ float Ball::getXVelocity()
 	return xVelocity;
 }
 
-void Ball::reboundSides()
+void Ball::setYVelocity(float pRand)
 {
-	xVelocity = -xVelocity;
+	yVelocity = pRand;
 }
 
-void Ball::reboundPaddleOrTop()
+float Ball::getYVelocity()
 {
-	position.y -= (yVelocity * 30);
-	yVelocity = -yVelocity;
+	return yVelocity;
 }
 
 void Ball::hitBottom()
@@ -47,4 +46,34 @@ void Ball::update()
 	position.x += xVelocity;
 
 	ballShape.setPosition(position);
+}
+
+void Ball::flipXVelocity()
+{
+	if (xVelocity < 0)
+	{
+		xVelocity = 0.1f;
+	}
+	else if (xVelocity > 0)
+	{
+		xVelocity = -0.1f;
+	}
+}
+
+void Ball::flipYVelocity()
+{
+	if (yVelocity < 0)
+	{
+		yVelocity = 0.1f;
+	}
+	else if (yVelocity > 0)
+	{
+		yVelocity = -0.1f;
+	}
+}
+
+void Ball::reset()
+{
+	this->position.x = 0;
+	this->position.y = 0;
 }

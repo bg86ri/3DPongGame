@@ -8,16 +8,19 @@ class Ball
 private:
 	Vector2f position;
 	RectangleShape ballShape;
-	float xVelocity = .2f;
-	float yVelocity = .2f;
+	float xVelocity = .1f;
+	float yVelocity = .01f;
 
 public:
 	Ball(float startX, float startY);
 	FloatRect getPosition();
 	RectangleShape getShape();
+	void setYVelocity(float pRand);
 	float getXVelocity();
-	void reboundSides();
-	void reboundPaddleOrTop();
+	float getYVelocity();
 	void hitBottom();
 	void update();
+	void flipXVelocity();
+	void flipYVelocity();
+	void reset();
 };
