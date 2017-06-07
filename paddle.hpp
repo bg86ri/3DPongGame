@@ -14,7 +14,6 @@ public:
 	Paddle(float startX, float startY);
 	FloatRect getPosition();
 	Vector2f position;
-	RectangleShape getShape();
 	void moveLeft();
 	void moveRight();
 	void update();

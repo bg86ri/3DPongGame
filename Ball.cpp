@@ -1,5 +1,6 @@
 #include "ball.hpp"
 
+//this sets all the ball's starting attributes
 Ball::Ball(float startX, float startY)
 {
 	position.x = 0;
@@ -9,14 +10,10 @@ Ball::Ball(float startX, float startY)
 	ballShape.setPosition(position);
 }
 
+//this obtains the balls position using the balls global bounds
 FloatRect Ball::getPosition()
 {
 	return ballShape.getGlobalBounds();
-}
-
-RectangleShape Ball::getShape()
-{
-	return ballShape;
 }
 
 float Ball::getXVelocity()
@@ -34,12 +31,7 @@ float Ball::getYVelocity()
 	return yVelocity;
 }
 
-void Ball::hitBottom()
-{
-	position.y = 1;
-	position.x = 500;
-}
-
+//this will change the position of the ball based on the velocity
 void Ball::update()
 {
 	position.y += yVelocity;
@@ -48,6 +40,7 @@ void Ball::update()
 	ballShape.setPosition(position);
 }
 
+//this changes the direction that the ball is travelling on the Y axis when called
 void Ball::flipXVelocity()
 {
 	if (xVelocity < 0)
@@ -60,6 +53,7 @@ void Ball::flipXVelocity()
 	}
 }
 
+//this changes the direction that the ball is travelling on the Y axis when called
 void Ball::flipYVelocity()
 {
 	if (yVelocity < 0)
@@ -72,6 +66,7 @@ void Ball::flipYVelocity()
 	}
 }
 
+//when this will put the ball back in the center of the screen when called
 void Ball::reset()
 {
 	this->position.x = 0;

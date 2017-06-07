@@ -14,11 +14,9 @@ private:
 public:
 	Ball(float startX, float startY);
 	FloatRect getPosition();
-	RectangleShape getShape();
 	void setYVelocity(float pRand);
 	float getXVelocity();
 	float getYVelocity();
-	void hitBottom();
 	void update();
 	void flipXVelocity();
 	void flipYVelocity();
